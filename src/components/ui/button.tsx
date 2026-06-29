@@ -4,17 +4,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-neutral-900 text-neutral-50 hover:bg-neutral-800",
-        destructive: "bg-red-600 text-white hover:bg-red-500",
+        default:
+          "bg-accent text-white hover:bg-accent-hover focus-visible:ring-focus-ring focus-visible:ring-offset-white",
+        destructive:
+          "bg-destructive text-white hover:opacity-90 focus-visible:ring-destructive/50 focus-visible:ring-offset-white",
         outline:
-          "border border-neutral-200 bg-white hover:bg-neutral-100 hover:text-neutral-900",
-        secondary: "bg-neutral-100 text-neutral-900 hover:bg-neutral-200",
-        ghost: "hover:bg-neutral-100 hover:text-neutral-900",
-        link: "text-neutral-900 underline-offset-4 hover:underline",
+          "border border-border bg-surface hover:bg-surface-subtle hover:text-ink focus-visible:ring-focus-ring focus-visible:ring-offset-white",
+        secondary:
+          "bg-surface-subtle text-ink hover:bg-border focus-visible:ring-focus-ring focus-visible:ring-offset-white",
+        ghost:
+          "hover:bg-surface-subtle hover:text-ink focus-visible:ring-focus-ring focus-visible:ring-offset-white",
+        link: "text-accent underline-offset-4 hover:underline focus-visible:ring-focus-ring",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -58,19 +58,19 @@ export function OpportunityCard({
         tabIndex={0}
         onClick={onClick}
         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onClick?.(); }}
-        aria-label={`Opportunity: ${clientName}`}
+        aria-label={`Oportunidad: ${clientName}`}
       >
         <CardContent className="p-3">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="text-sm font-medium">{clientName}</h3>
+            <h3 className="text-sm font-medium text-ink">{clientName}</h3>
             {isStale && <StaleBadge days={daysSinceUpdate} />}
           </div>
-          <p className="mt-1 line-clamp-2 text-xs text-neutral-500">
+          <p className="mt-1 line-clamp-2 text-xs text-ink-secondary">
             {description}
           </p>
           <div className="mt-2 flex items-center gap-2">
-            <span className="text-xs font-medium">
-              ${estimatedBudget.toLocaleString()}
+            <span className="text-xs font-medium text-ink">
+              ${estimatedBudget.toLocaleString("es")}
             </span>
             {paymentStatus && (
               <Badge variant="secondary" className="text-[10px]">
@@ -83,8 +83,8 @@ export function OpportunityCard({
               </Badge>
             )}
           </div>
-          <p className="mt-1 text-[10px] text-neutral-400">
-            {daysSinceUpdate}d ago
+          <p className="mt-1 text-[10px] text-ink-muted">
+            hace {daysSinceUpdate}d
           </p>
         </CardContent>
       </Card>

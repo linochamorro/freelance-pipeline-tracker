@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Freelance Pipeline Tracker",
   description:
-    "Track your freelance opportunities from first contact to final delivery and payment.",
+    "Gestiona tus oportunidades freelance desde el primer contacto hasta la entrega final y el cobro.",
 };
 
 export default function RootLayout({
@@ -13,8 +13,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="es">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
+      <body className="min-h-screen antialiased">{children}</body>
     </html>
   );
 }

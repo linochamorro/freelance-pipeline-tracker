@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { KanbanBoard } from "@/components/opportunities/kanban-board";
+import { PageSkeleton } from "@/components/shared/skeleton";
+import { ErrorState } from "@/components/shared/error-state";
 
 type Opportunity = {
   id: string;
@@ -23,29 +25,35 @@ const PIPELINE_STAGES = [
 
 const STAGE_LABELS: Record<string, string> = {
   Lead: "Lead",
-  Contacted: "Contacted",
-  InDiscussion: "In Discussion",
-  ProposalSent: "Proposal Sent",
-  Negotiation: "Negotiation",
-  Accepted: "Accepted",
-  Rejected: "Rejected",
-  OnHold: "On Hold",
-  InDevelopment: "In Development",
-  Completed: "Completed",
+  Contacted: "Contactado",
+  InDiscussion: "En conversación",
+  ProposalSent: "Propuesta enviada",
+  Negotiation: "Negociación",
+  Accepted: "Aceptado",
+  Rejected: "Rechazado",
+  OnHold: "En espera",
+  InDevelopment: "En desarrollo",
+  Completed: "Completado",
 };
 
 export default function KanbanPage() {
   const router = useRouter();
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const fetchOpportunities = useCallback(async () => {
+    setLoading(true);
+    setError(false);
     try {
       const res = await fetch("/api/opportunities");
       if (res.status === 401) router.push("/login");
       const json = await res.json();
       if (json.success) setOpportunities(json.data);
     } catch {
-      // silently fail
+      setError(true);
+    } finally {
+      setLoading(false);
     }
   }, [router]);
 
@@ -73,14 +81,19 @@ export default function KanbanPage() {
       ),
     );
 
-    await fetch(`/api/opportunities/${id}`, {
+    const res = await fetch(`/api/opportunities/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ pipelineStage: newStage }),
     });
 
-    fetchOpportunities();
+    if (!res.ok) {
+      fetchOpportunities();
+    }
   }
+
+  if (loading) return <PageSkeleton />;
+  if (error) return <ErrorState onRetry={fetchOpportunities} />;
 
   return (
     <div className="p-4">

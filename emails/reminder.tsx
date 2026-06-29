@@ -19,24 +19,25 @@ export default function ReminderEmail({
   staleCount = 0,
   dashboardLink = "",
 }: ReminderEmailProps) {
+  const label = staleCount === 1 ? "oportunidad" : "oportunidades";
+
   return (
     <Html>
       <Head />
       <Preview>
-        You have {staleCount} stale {staleCount === 1 ? "opportunity" : "opportunities"} to follow up
+        Tienes {staleCount.toString()} {label} inactivas para revisar
       </Preview>
       <Body style={main}>
         <Container style={container}>
-          <Heading style={h1}>Follow-up reminder</Heading>
+          <Heading style={h1}>Recordatorio de seguimiento</Heading>
           <Text style={text}>
-            You have {staleCount} stale{" "}
-            {staleCount === 1 ? "opportunity" : "opportunities"} in your pipeline
-            that haven&apos;t been updated recently.
+            Tienes {staleCount.toString()} {label} en tu pipeline{" "}
+            que no han sido actualizadas recientemente.
           </Text>
           <Section style={buttonContainer}>
             <Text style={text}>
               <a href={dashboardLink} style={link}>
-                View your pipeline
+                Ver tu pipeline
               </a>
             </Text>
           </Section>

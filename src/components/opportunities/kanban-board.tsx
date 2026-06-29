@@ -16,6 +16,9 @@ import { useRouter } from "next/navigation";
 import { KanbanColumn } from "./kanban-column";
 import { OpportunityCard } from "./opportunity-card";
 import { OpportunityForm } from "./opportunity-form";
+import { OpportunityFilters } from "./opportunity-filters";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 type Opportunity = {
   id: string;
@@ -55,6 +58,13 @@ export function KanbanBoard({
   const router = useRouter();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [filters, setFilters] = useState<{
+    contactChannel?: string;
+    pipelineStage?: string;
+    paymentStatus?: string;
+    developmentStatus?: string;
+    search?: string;
+  }>({});
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -78,16 +88,15 @@ export function KanbanBoard({
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Pipeline</h1>
-        <button
-          type="button"
-          className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
-          onClick={() => setShowForm(true)}
-        >
-          New opportunity
-        </button>
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-xl font-semibold text-ink">Pipeline</h1>
+        <Button onClick={() => setShowForm(true)}>
+          <Plus className="h-4 w-4" />
+          Nueva oportunidad
+        </Button>
       </div>
+
+      <OpportunityFilters filters={filters} onChange={setFilters} />
 
       {showForm && (
         <OpportunityForm
@@ -103,10 +112,10 @@ export function KanbanBoard({
         onDragEnd={handleDragEnd}
       >
         <div
-          className="flex gap-4 overflow-x-auto pb-4"
+          className="mt-4 flex gap-4 overflow-x-auto pb-4"
           style={{ scrollBehavior: "smooth" }}
-          role="application"
-          aria-label="Kanban board"
+          role="region"
+          aria-label="Tablero Kanban"
         >
           {columns.map((column) => (
             <KanbanColumn
@@ -124,8 +133,8 @@ export function KanbanBoard({
           {activeId ? (
             <div className="w-72 opacity-80">
               <OpportunityCard
-                id={activeId}
                 {...(allOpportunities.find((o) => o.id === activeId) || {
+                  id: activeId || "",
                   clientName: "",
                   description: "",
                   estimatedBudget: 0,

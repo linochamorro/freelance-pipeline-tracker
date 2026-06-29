@@ -3,6 +3,8 @@
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { OpportunityCard } from "./opportunity-card";
+import { EmptyState } from "@/components/shared/empty-state";
+import { Inbox } from "lucide-react";
 
 type Opportunity = {
   id: string;
@@ -34,15 +36,15 @@ export function KanbanColumn({
   return (
     <div
       ref={setNodeRef}
-      className={`flex w-72 shrink-0 flex-col rounded-lg bg-neutral-50 p-3 ${
-        isOver ? "ring-2 ring-neutral-400" : ""
+      className={`flex w-72 shrink-0 flex-col rounded-lg bg-surface-subtle p-3 ${
+        isOver ? "ring-2 ring-accent" : ""
       }`}
       role="region"
-      aria-label={`${title} column`}
+      aria-label={`Columna ${title}`}
     >
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-neutral-700">{title}</h2>
-        <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-xs text-neutral-600">
+        <h2 className="text-sm font-semibold text-ink">{title}</h2>
+        <span className="rounded-full bg-border px-2 py-0.5 text-xs text-ink-secondary">
           {opportunities.length}
         </span>
       </div>
@@ -69,9 +71,11 @@ export function KanbanColumn({
         </SortableContext>
 
         {opportunities.length === 0 && (
-          <p className="py-8 text-center text-xs text-neutral-400">
-            No opportunities
-          </p>
+          <EmptyState
+            icon={<Inbox className="h-8 w-8" />}
+            title="Sin oportunidades"
+            description="Arrastra oportunidades aquí"
+          />
         )}
       </div>
     </div>

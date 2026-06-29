@@ -32,10 +32,10 @@ export const developmentStatusEnum = z.enum([
 ]);
 
 export const createOpportunitySchema = z.object({
-  clientName: z.string().min(1, "Client name is required"),
-  description: z.string().min(1, "Description is required"),
-  estimatedBudget: z.number().positive("Budget must be positive"),
-  contactPersonName: z.string().min(1, "Contact person is required"),
+  clientName: z.string().min(1, "El nombre del cliente es obligatorio"),
+  description: z.string().min(1, "La descripción es obligatoria"),
+  estimatedBudget: z.number().positive("El presupuesto debe ser positivo"),
+  contactPersonName: z.string().min(1, "La persona de contacto es obligatoria"),
   contactChannel: contactChannelEnum,
 });
 

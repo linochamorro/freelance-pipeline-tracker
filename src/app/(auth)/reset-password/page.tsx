@@ -20,28 +20,28 @@ export default function ResetPasswordPage() {
       <div className="flex min-h-screen items-center justify-center p-4">
         <Card className="w-full max-w-sm">
           <CardHeader className="text-center">
-            <CardTitle>Check your email</CardTitle>
+            <CardTitle>Revisa tu email</CardTitle>
             <CardDescription>
-              If an account exists with that email, we&apos;ve sent a reset link.
+              Si existe una cuenta con ese email, te hemos enviado un enlace de recuperación.
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center">
-            <p className="text-sm text-neutral-500">
-              Didn&apos;t receive it?{" "}
+            <p className="text-sm text-ink-secondary">
+              ¿No lo recibiste?{" "}
               <button
                 type="button"
-                className="underline underline-offset-4 hover:text-neutral-900"
+                className="text-accent underline underline-offset-4 hover:text-accent-hover"
                 onClick={() => setSent(false)}
               >
-                Try again
+                Intentar de nuevo
               </button>
             </p>
             <p className="mt-4">
               <a
                 href="/login"
-                className="text-sm text-neutral-900 underline underline-offset-4"
+                className="text-sm text-ink-secondary underline underline-offset-4 hover:text-ink"
               >
-                Back to sign in
+                Volver a iniciar sesión
               </a>
             </p>
           </CardContent>
@@ -54,9 +54,9 @@ export default function ResetPasswordPage() {
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <CardTitle>Reset password</CardTitle>
+          <CardTitle>Restablecer contraseña</CardTitle>
           <CardDescription>
-            Enter your email and we&apos;ll send you a reset link
+            Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -66,22 +66,23 @@ export default function ResetPasswordPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="tu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                autoComplete="email"
               />
             </div>
             <Button type="submit" className="w-full">
-              Send reset link
+              Enviar enlace
             </Button>
           </form>
-          <p className="mt-4 text-center text-sm text-neutral-500">
+          <p className="mt-4 text-center text-sm text-ink-secondary">
             <a
               href="/login"
-              className="underline underline-offset-4 hover:text-neutral-900"
+              className="underline underline-offset-4 hover:text-ink"
             >
-              Back to sign in
+              Volver a iniciar sesión
             </a>
           </p>
         </CardContent>

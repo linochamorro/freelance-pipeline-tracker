@@ -1,10 +1,14 @@
-import { auth } from "@/auth";
-import { authConfig } from "@/auth.config";
-
-export { auth as middleware } from "@/auth";
+export { auth as proxy } from "@/auth";
 
 export const config = {
-  matcher: authConfig.pages?.signIn
-    ? ["/((?!api/auth|_next/static|_next/image|favicon.ico).*)"]
-    : [],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
 };

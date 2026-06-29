@@ -5,7 +5,7 @@ import {
   createOpportunity,
   getOpportunitiesByUser,
 } from "@/services/opportunity-service";
-import { PipelineStage } from "@/generated/prisma";
+import { PipelineStage } from "@prisma/client";
 
 export async function GET(request: Request) {
   const session = await auth();
