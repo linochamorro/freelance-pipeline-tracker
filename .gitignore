@@ -1,0 +1,53 @@
+# Dependencias
+node_modules/
+
+# PostgreSQL portable local usado para QA (binarios/runtime y datos efímeros)
+.local/postgres-runtime/
+.local/postgres-data/
+
+# Variables de entorno y secretos. Solo se permite publicar la plantilla.
+.env*
+!.env.example
+
+# Next.js
+.next/
+out/
+
+# Prisma (cliente generado local)
+src/generated/
+prisma/generated/
+
+# Builds y artefactos incremental
+dist/
+build/
+*.tsbuildinfo
+
+# Material temporal: pruebas, reportes, análisis y staging local
+coverage/
+
+# Logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Material interno y documentos no publicables. Solo se permiten architecture/, decisions/ e images/.
+reports/
+docs/*
+!docs/architecture/
+!docs/architecture/**
+!docs/decisions/
+!docs/decisions/**
+!docs/images/
+!docs/images/**
+AGENTS.md
+STATE.md
+.opencode/
+.agents/
+temporary/
+
+# Regenerado por Next.js (convención de la plantilla oficial; opcional)
+next-env.d.ts
+
+

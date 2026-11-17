@@ -1,0 +1,44 @@
+/* src/app/globals.css
+ * Hoja de estilos global (Tailwind CSS 4 vía @tailwindcss/postcss).
+ * Sin frameworks adicionales ni dependencias nuevas: el tema por defecto de
+ * Tailwind 4 aporta los tokens del sistema de diseño (slate-50/950 fondos,
+ * indigo-600 acento, emerald/amber/rose semánticos). Aquí solo se fijan los
+ * comportamientos globales mínimos. */
+
+@import "tailwindcss";
+
+@layer base {
+  html {
+    /* Mantiene la interfaz y los controles nativos en modo Light fijo. */
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Foco visible homogéneo para cualquier elemento enfocable
+   * (WCAG 2.2 — 2.4.7 Focus Visible / 2.4.13 Focus Appearance). */
+  :focus-visible {
+    outline: 2px solid var(--color-indigo-600);
+    outline-offset: 2px;
+  }
+
+  /* Respeta la preferencia de movimiento reducido (WCAG 2.2 — 2.3.3). */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+

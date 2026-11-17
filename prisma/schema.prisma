@@ -1,0 +1,204 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PipelineStage {
+  Lead
+  Contacted
+  MeetingScheduled
+  BriefReceived
+  ProposalSent
+  Negotiation
+  Accepted
+  InProgress
+  Completed
+  Rejected
+}
+
+enum PaymentStatus {
+  Pending
+  PartialPaid
+  Paid
+  Refunded
+}
+
+enum DevelopmentStatus {
+  NotStarted
+  InProgress
+  InReview
+  Delivered
+}
+
+enum ContactChannel {
+  LinkedIn
+  Email
+  Referral
+  ColdOutreach
+  WhatsApp
+  Phone
+  Other
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String?
+  email         String         @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?
+  accounts      Account[]
+  sessions      Session[]
+  opportunities Opportunity[]
+  tasks         Task[]
+  notifications Notification[]
+  userSettings  UserSettings?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Opportunity {
+  id                String             @id @default(cuid())
+  userId            String
+  clientName        String
+  description       String
+  estimatedBudget   Float
+  contactPersonName String
+  contactChannel    ContactChannel
+  pipelineStage     PipelineStage      @default(Lead)
+  paymentStatus     PaymentStatus?
+  developmentStatus DevelopmentStatus?
+  isArchived        Boolean            @default(false)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes             Note[]
+  stageChanges      StageChange[]
+  subStateChanges   SubStateChange[]
+  tasks             Task[]
+
+  @@index([userId])
+  @@index([userId, pipelineStage])
+  @@index([userId, isArchived])
+}
+
+model Note {
+  id            String      @id @default(cuid())
+  opportunityId String
+  content       String
+  createdAt     DateTime    @default(now())
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+
+  @@index([opportunityId])
+}
+
+model StageChange {
+  id            String        @id @default(cuid())
+  opportunityId String
+  fromStage     PipelineStage
+  toStage       PipelineStage
+  createdAt     DateTime      @default(now())
+  opportunity   Opportunity   @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+
+  @@index([opportunityId])
+}
+
+model SubStateChange {
+  id            String      @id @default(cuid())
+  opportunityId String
+  field         String // "pipelineStage" | "developmentStatus" | "paymentStatus"
+  fromValue     String
+  toValue       String
+  observation   String?
+  createdAt     DateTime    @default(now())
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+
+  @@index([opportunityId])
+}
+
+model UserSettings {
+  id                       String  @id @default(cuid())
+  userId                   String  @unique
+  prospectionStalenessDays Int     @default(7)
+  proposalStalenessDays    Int     @default(7)
+  executionStalenessDays   Int     @default(7)
+  billingStalenessDays     Int     @default(7)
+  closedStalenessDays      Int     @default(7)
+  notificationEnabled      Boolean @default(true)
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Task {
+  id            String         @id @default(cuid())
+  userId        String
+  opportunityId String?
+  title         String
+  description   String
+  dueDate       DateTime
+  completed     Boolean        @default(false)
+  leadMinutes   Int
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  opportunity   Opportunity?   @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  notifications Notification[]
+
+  @@index([userId])
+  @@index([opportunityId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  taskId    String
+  title     String
+  message   String
+  triggerAt DateTime
+  sentEmail Boolean  @default(false)
+  readInApp Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([taskId])
+}
